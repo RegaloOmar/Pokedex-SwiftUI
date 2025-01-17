@@ -1,0 +1,44 @@
+//
+//  PokemonListUI.swift
+//  Pokedex
+//
+//  Created by Omar Regalado Mendoza on 14/01/25.
+//
+
+import SwiftUI
+
+struct PokemonListUI: View {
+    
+    @StateObject private var viewModel: PokemonListViewModel = PokemonListViewModel()
+    var body: some View {
+        ZStack {
+            if viewModel.isLoading == true {
+                LoaderCellUI()
+            } else {
+                GeometryReader { geometry in
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.fixed((geometry.size.width / 2) - 10)), GridItem(.fixed((geometry.size.width / 2) - 10))], content: {
+                            ForEach(viewModel.pokemonsList, id: \.name) { pokemon in
+                                PokemonCellUI(pokemonNumber: String(format: "#%03d", pokemon.id),
+                                              pokemonName: pokemon.name.capitalized,
+                                              pokemonImage: pokemon.image)
+                                    .frame(height: geometry.size.height/5)
+                            }
+                        })
+                    }
+                    .scrollIndicators(.hidden)
+                }
+            }
+        }
+        .onAppear {
+            Task{
+                await viewModel.fetchPokemonList()
+            }
+        }
+    }
+}
+
+#Preview {
+    PokemonListUI()
+        .preferredColorScheme(.dark)
+}
