@@ -10,6 +10,7 @@ import SwiftUI
 struct PokemonListUI: View {
     
     @StateObject private var viewModel: PokemonListViewModel = PokemonListViewModel()
+    
     var body: some View {
         ZStack {
             if viewModel.isLoading == true {
@@ -21,7 +22,8 @@ struct PokemonListUI: View {
                             ForEach(viewModel.pokemonsList, id: \.name) { pokemon in
                                 PokemonCellUI(pokemonNumber: String(format: "#%03d", pokemon.id),
                                               pokemonName: pokemon.name.capitalized,
-                                              pokemonImage: pokemon.image)
+                                              pokemonImage: pokemon.image, 
+                                              pokemonTypes: pokemon.pokemonTypes)
                                     .frame(height: geometry.size.height/5)
                             }
                         })

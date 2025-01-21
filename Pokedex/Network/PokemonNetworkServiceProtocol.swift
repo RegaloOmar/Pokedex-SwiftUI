@@ -12,4 +12,5 @@ protocol PokemonNetworkServiceProtocol {
     func getPokemonList() async -> Result<[ResultData], PokemonNetworkError>
     func getPokemonInformation(urlString: String) async -> Result<PokemonData, PokemonNetworkError>
     func getPokemonImage(urlString: String) async -> Result<UIImage, PokemonNetworkError>
+    func getPokemonTypes(urlString: String) async -> Result<PokemonTypeData, PokemonNetworkError> 
 }

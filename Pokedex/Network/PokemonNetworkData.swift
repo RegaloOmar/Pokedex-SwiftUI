@@ -33,8 +33,6 @@ final class PokemonNetworkData: PokemonNetworkServiceProtocol {
         }
     }
     
-    
-    
     func getPokemonInformation(urlString: String) async -> Result<PokemonData, PokemonNetworkError> {
         
         let result: ServiceStatus<PokemonData?> = await ServiceCoordinator.shared.sendRequest(url: urlString)
@@ -69,6 +67,24 @@ final class PokemonNetworkData: PokemonNetworkServiceProtocol {
                 return .failure(.otherCode(code: code))
         }
         
+    }
+    
+    func getPokemonTypes(urlString: String) async -> Result<PokemonTypeData, PokemonNetworkError> {
+        
+        let result: ServiceStatus<PokemonTypeData?> = await ServiceCoordinator.shared.sendRequest(url: urlString)
+        
+        switch result {
+            case .success(let dataType):
+                if let dataType = dataType {
+                    return .success(dataType)
+                } else {
+                    return .failure(.notFound)
+                }
+            case .failed(let error):
+                return .failure(error)
+            case .information(let code):
+                return .failure(.otherCode(code: code))
+        }
     }
     
 }

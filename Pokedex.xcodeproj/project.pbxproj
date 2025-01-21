@@ -29,6 +29,7 @@
 		E5B248512D382321000CA43D /* PokemonCellUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B248502D382321000CA43D /* PokemonCellUI.swift */; };
 		E5B248532D39D7F5000CA43D /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B248522D39D7F5000CA43D /* Pokemon.swift */; };
 		E5B248552D39DAF3000CA43D /* PokemonDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B248542D39DAF3000CA43D /* PokemonDescription.swift */; };
+		E5BE2DC92D403A5A00917062 /* PokemonTypesColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BE2DC82D403A5A00917062 /* PokemonTypesColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		E5B248502D382321000CA43D /* PokemonCellUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCellUI.swift; sourceTree = "<group>"; };
 		E5B248522D39D7F5000CA43D /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		E5B248542D39DAF3000CA43D /* PokemonDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDescription.swift; sourceTree = "<group>"; };
+		E5BE2DC82D403A5A00917062 /* PokemonTypesColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTypesColor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 		E52EB1CC2D31B71F0075ACF4 /* Pokedex */ = {
 			isa = PBXGroup;
 			children = (
+				E5BE2DC42D4036D100917062 /* Utils */,
 				E52EB2162D372D660075ACF4 /* Data */,
 				E52EB2122D3725A50075ACF4 /* Network */,
 				E52EB20B2D3723980075ACF4 /* Views */,
@@ -226,6 +229,14 @@
 				E5B248502D382321000CA43D /* PokemonCellUI.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		E5BE2DC42D4036D100917062 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E5BE2DC82D403A5A00917062 /* PokemonTypesColor.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -369,6 +380,7 @@
 				E52EB1D22D31B71F0075ACF4 /* Item.swift in Sources */,
 				E52EB2112D3724A30075ACF4 /* PokemonListViewModel.swift in Sources */,
 				E52EB2072D3719B60075ACF4 /* PokemonTypeData.swift in Sources */,
+				E5BE2DC92D403A5A00917062 /* PokemonTypesColor.swift in Sources */,
 				E52EB2012D31BFE30075ACF4 /* PokemonListData.swift in Sources */,
 				E52EB1CE2D31B71F0075ACF4 /* PokedexApp.swift in Sources */,
 				E5B2484F2D3777FD000CA43D /* LoaderCellUI.swift in Sources */,

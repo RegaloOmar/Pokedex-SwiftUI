@@ -12,12 +12,13 @@ struct PokemonCellUI: View {
     var pokemonNumber: String
     var pokemonName: String
     var pokemonImage: UIImage?
+    var pokemonTypes: [String]
     
     var body: some View {
         
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(Color.green)
+                .foregroundStyle(Color.pokedexBackground)
             
             HStack {
                 Spacer()
@@ -33,25 +34,35 @@ struct PokemonCellUI: View {
                 
             
             HStack {
-                VStack {
+                VStack(alignment: .leading) {
                     
                     Text(pokemonName)
-                        .foregroundStyle(Color.white)
+                        .fixedSize()
+                        .foregroundStyle(Color.primary)
                         .textInputAutocapitalization(.words)
                         .bold()
                         .padding()
                     
                     Spacer()
+                    
+                    LazyHGrid(rows: [GridItem(.adaptive(minimum: 50, maximum: 100)), GridItem(.adaptive(minimum: 50, maximum: 100))], alignment: .bottom, spacing: 1.0, content: {
+                        ForEach(pokemonTypes, id: \.count) { type in
+                            PokemonTypeUI(typeName: type)
+                        }
+                    })
+                    .padding(.leading)
+                    .padding(.bottom, 10)
+                    
                 }
                 .padding(.trailing, -15)
                 .padding(.leading, -8)
                 
                 Spacer()
                 
-                VStack {
+                VStack(alignment: .trailing) {
                     Text(pokemonNumber)
                         .font(.system(size: 15))
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.primary)
                         .bold()
                         .padding()
                     
@@ -71,5 +82,32 @@ struct PokemonCellUI: View {
 #Preview {
     PokemonCellUI(pokemonNumber: "#001",
                   pokemonName: "Bulbasur",
-                  pokemonImage: UIImage(named: "dummy.bulbasur")!)
+                  pokemonImage: UIImage(named: "dummy.bulbasur")!, 
+                  pokemonTypes: ["grass", "bug"])
+}
+
+struct PokemonTypeUI: View {
+    
+    var typeName: String
+    
+    var body: some View {
+        Text(typeName.capitalized)
+            .font(.system(size: 15.0))
+            .foregroundStyle(Color.primary)
+            .bold()
+            .padding(.vertical, 5)
+            .padding(.horizontal,8)
+            .foregroundStyle(Color.white)
+            .background {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .foregroundStyle(Color.getPokemonTypeColor(typeName))
+                    
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(lineWidth: 1.2)
+                        .foregroundStyle(Color.primary)
+                    
+                }
+            }
+    }
 }

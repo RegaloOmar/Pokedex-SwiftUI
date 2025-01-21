@@ -46,17 +46,18 @@ class PokemonListViewModel: ObservableObject {
             
             for pokemonData in pokemonList {
                 
-                taskGroup.addTask {
-                    let pokemonInfo = await self.networkService.getPokemonInformation(urlString: pokemonData.url)
+                taskGroup.addTask { [self] in
+                    let pokemonInfo = await networkService.getPokemonInformation(urlString: pokemonData.url)
                     
                     switch pokemonInfo {
                         case .success(let information):
                             
-                            let pokemonImage = await self.getPokemonsImage(imageURL: information.sprites?.other?.officialArtwork?.frontDefault)
+                            let pokemonImage = await getPokemonsImage(imageURL: information.sprites?.other?.officialArtwork?.frontDefault)
+                            let pokemonTypes = await getPokemonTypes(elements: information.types)
                             let name = information.name ?? "No Name"
                             let id = information.id ?? 0
                             
-                            let pokemon = Pokemon(id: id, name: name, image: pokemonImage)
+                            let pokemon = Pokemon(id: id, name: name, image: pokemonImage, PokemonTypes: pokemonTypes)
                             
                             return .success(pokemon)
                         case .failure(let error):
@@ -95,8 +96,50 @@ class PokemonListViewModel: ObservableObject {
         switch imageResults {
             case .success(let image):
                 return image
-            case .failure(let error):
+            case .failure(_):
                 return nil
         }
+    }
+    
+    func getPokemonTypes(elements: [TypeElement]?) async -> [String] {
+        guard let elements = elements else {
+            return []
+        }
+        
+        let resultTypes = await withTaskGroup(of: Result<PokemonTypeData, PokemonNetworkError>.self, returning: [String].self) { taskGroup in
+            
+            for element in elements {
+                if let url = element.type?.url {
+                    taskGroup.addTask { [self] in
+                        let result = await networkService.getPokemonTypes(urlString: url)
+                        
+                        switch result {
+                            case .success(let dataType):
+                                return .success(dataType)
+                            case .failure(let error):
+                                return .failure(error)
+                        }
+                    }
+                }
+            }
+            
+            let typeList = await taskGroup.reduce(into: [String]()) { partialResult, result in
+                
+                switch result {
+                    case .success(let type):
+                        guard let name = type.name else {
+                            break
+                        }
+                        partialResult.append(name)
+                    
+                    case .failure(let error):
+                        break
+                }
+            }
+            
+            return typeList
+        }
+        
+        return resultTypes
     }
 }
