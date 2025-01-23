@@ -25,6 +25,13 @@ struct PokemonListUI: View {
                                               pokemonImage: pokemon.image, 
                                               pokemonTypes: pokemon.pokemonTypes)
                                     .frame(height: geometry.size.height/5)
+                                    .onAppear {
+                                        if pokemon.id == viewModel.pokemonsList.last?.id {
+                                            Task(priority: .userInitiated) {
+                                                await viewModel.fetchPokemonList()
+                                            }
+                                        }
+                                    }
                             }
                         })
                     }
@@ -33,7 +40,7 @@ struct PokemonListUI: View {
             }
         }
         .onAppear {
-            Task{
+            Task {
                 await viewModel.fetchPokemonList()
             }
         }

@@ -17,18 +17,19 @@ class PokemonListViewModel: ObservableObject {
     
     init(networkService: PokemonNetworkServiceProtocol = PokemonNetworkData()) {
         self.networkService = networkService
+        isLoading = true
     }
     
-    @MainActor
     func fetchPokemonList() async {
         let result = await networkService.getPokemonList()
-        isLoading = true
         switch result {
             case .success(let pokemons):
                 let pokemons = await getPokemonFullInformation(pokemonList: pokemons)
                 switch pokemons {
                     case .success(let pokemonlist):
-                        self.pokemonsList = pokemonlist
+                        for pokemon in pokemonlist {
+                            self.pokemonsList.append(pokemon)
+                        }
                         isLoading = false
                     case .failure(let error):
                         print("Error fetching Pokemon list: \(error)")
