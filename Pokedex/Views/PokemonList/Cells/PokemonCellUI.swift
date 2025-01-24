@@ -12,7 +12,7 @@ struct PokemonCellUI: View {
     var pokemonNumber: String
     var pokemonName: String
     var pokemonImage: UIImage?
-    var pokemonTypes: [String]
+    var pokemonTypes: [PokemonTypeData]
     
     var body: some View {
         
@@ -46,8 +46,8 @@ struct PokemonCellUI: View {
                     Spacer()
                     
                     LazyHGrid(rows: [GridItem(.adaptive(minimum: 50, maximum: 100)), GridItem(.adaptive(minimum: 50, maximum: 100))], alignment: .bottom, spacing: 1.0, content: {
-                        ForEach(pokemonTypes, id: \.count) { type in
-                            PokemonTypeUI(typeName: type)
+                        ForEach(pokemonTypes, id: \.id) { type in
+                            PokemonTypeUI(typeName: type.name ?? "N/A")
                         }
                     })
                     .padding(.leading)
@@ -83,7 +83,12 @@ struct PokemonCellUI: View {
     PokemonCellUI(pokemonNumber: "#001",
                   pokemonName: "Bulbasur",
                   pokemonImage: UIImage(named: "dummy.bulbasur")!, 
-                  pokemonTypes: ["grass", "bug"])
+                  pokemonTypes: [PokemonTypeData(id: 1,
+                                                 name: "grass",
+                                                 names: [TypeName(language: .some(Generation(name: "", url: "")) , name: "")]),
+                                 PokemonTypeData(id: 3,
+                                                                name: "bug",
+                                                                names: [TypeName(language: .some(Generation(name: "", url: "")) , name: "")])])
 }
 
 struct PokemonTypeUI: View {

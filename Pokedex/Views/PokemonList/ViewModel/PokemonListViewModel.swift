@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 class PokemonListViewModel: ObservableObject {
     
     private var networkService: PokemonNetworkServiceProtocol
@@ -102,12 +103,12 @@ class PokemonListViewModel: ObservableObject {
         }
     }
     
-    func getPokemonTypes(elements: [TypeElement]?) async -> [String] {
+    func getPokemonTypes(elements: [TypeElement]?) async -> [PokemonTypeData] {
         guard let elements = elements else {
             return []
         }
         
-        let resultTypes = await withTaskGroup(of: Result<PokemonTypeData, PokemonNetworkError>.self, returning: [String].self) { taskGroup in
+        let resultTypes = await withTaskGroup(of: Result<PokemonTypeData, PokemonNetworkError>.self, returning: [PokemonTypeData].self) { taskGroup in
             
             for element in elements {
                 if let url = element.type?.url {
@@ -124,19 +125,22 @@ class PokemonListViewModel: ObservableObject {
                 }
             }
             
-            let typeList = await taskGroup.reduce(into: [String]()) { partialResult, result in
+            var typeList = await taskGroup.reduce(into: [PokemonTypeData]()) { partialResult, result in
                 
                 switch result {
                     case .success(let type):
-                        guard let name = type.name else {
-                            break
-                        }
-                        partialResult.append(name)
-                    
-                    case .failure(let error):
+                        partialResult.append(PokemonTypeData(id: type.id, name: type.name, names: type.names))
+                    case .failure(_):
                         break
                 }
             }
+            
+            typeList = typeList.sorted(by: { pokemonOrderBefore, pokemonOrderNext in
+                guard let beforeId = pokemonOrderBefore.id, let nextId = pokemonOrderNext.id else {
+                    return false
+                }
+                return beforeId > nextId
+            })
             
             return typeList
         }

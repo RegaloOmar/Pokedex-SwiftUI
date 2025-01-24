@@ -16,26 +16,33 @@ struct PokemonListUI: View {
             if viewModel.isLoading == true {
                 LoaderCellUI()
             } else {
-                GeometryReader { geometry in
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.fixed((geometry.size.width / 2) - 10)), GridItem(.fixed((geometry.size.width / 2) - 10))], content: {
-                            ForEach(viewModel.pokemonsList, id: \.name) { pokemon in
-                                PokemonCellUI(pokemonNumber: String(format: "#%03d", pokemon.id),
-                                              pokemonName: pokemon.name.capitalized,
-                                              pokemonImage: pokemon.image, 
-                                              pokemonTypes: pokemon.pokemonTypes)
-                                    .frame(height: geometry.size.height/5)
-                                    .onAppear {
-                                        if pokemon.id == viewModel.pokemonsList.last?.id {
-                                            Task(priority: .userInitiated) {
-                                                await viewModel.fetchPokemonList()
+                NavigationSplitView {
+                    GeometryReader { geometry in
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.fixed((geometry.size.width / 2) - 10)), GridItem(.fixed((geometry.size.width / 2) - 10))], content: {
+                                ForEach(viewModel.pokemonsList, id: \.name) { pokemon in
+                                    NavigationLink(destination: PokemonDetailUI(pokemon: pokemon)) {
+                                        PokemonCellUI(pokemonNumber: String(format: "#%03d", pokemon.id),
+                                                      pokemonName: pokemon.name.capitalized,
+                                                      pokemonImage: pokemon.image,
+                                                      pokemonTypes: pokemon.pokemonTypes)
+                                        .frame(height: geometry.size.height/5)
+                                        .onAppear {
+                                            if pokemon.id == viewModel.pokemonsList.last?.id {
+                                                Task(priority: .userInitiated) {
+                                                    await viewModel.fetchPokemonList()
+                                                }
                                             }
                                         }
                                     }
-                            }
-                        })
+                                    
+                                }
+                            })
+                        }
+                        .scrollIndicators(.hidden)
                     }
-                    .scrollIndicators(.hidden)
+                } detail: {
+                    Text("Select a Pokemon")
                 }
             }
         }
