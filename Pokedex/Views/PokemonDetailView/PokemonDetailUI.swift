@@ -32,6 +32,8 @@ struct PokemonDetailUI: View {
                     }
                 })
             }
+            
+            Spacer()
         }
         .navigationTitle(pokemon.name.capitalized)
     }
