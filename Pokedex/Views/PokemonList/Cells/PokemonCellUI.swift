@@ -18,7 +18,7 @@ struct PokemonCellUI: View {
         
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(Color.pokedexBackground)
+                .foregroundStyle(Color.pokedexScreenBackground)
             
             HStack {
                 Spacer()
