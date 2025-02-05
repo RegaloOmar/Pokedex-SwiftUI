@@ -87,4 +87,45 @@ final class PokemonNetworkData: PokemonNetworkServiceProtocol {
         }
     }
     
+    func getPokemonDetails(id: Int) async -> Result<PokemonDescriptionData, PokemonNetworkError> {
+        let url = PokemonAPIConstans.getPokemonDetailURL(id: id)
+        
+        
+        let result: ServiceStatus<PokemonDescriptionData?> = await ServiceCoordinator.shared.sendRequest(url: url)
+        
+        switch result {
+            
+            case .success(data: let data):
+                if let data = data {
+                    return .success(data)
+                } else {
+                    return .failure(.notFound)
+                }
+            case .failed(error: let error):
+                return .failure(error)
+            case .information(code: let code):
+                return .failure(.otherCode(code: code))
+        }
+    }
+    
+    
+    func getPokemonDescription(url stringURL: String) async -> Result<PokemonDescriptionData, PokemonNetworkError> {
+        
+        let result: ServiceStatus<PokemonDescriptionData?> = await ServiceCoordinator.shared.sendRequest(url: stringURL)
+
+        switch result {
+        case .success(data: let data):
+            if let data = data {
+                return .success(data)
+            } else {
+                return .failure(.notFound)
+            }
+        case .failed(error: let error):
+            return .failure(error)
+        case .information(code: let code):
+            return .failure(.otherCode(code: code))
+
+        }
+    }
+    
 }

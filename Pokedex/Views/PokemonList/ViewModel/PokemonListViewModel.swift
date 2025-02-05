@@ -58,8 +58,15 @@ class PokemonListViewModel: ObservableObject {
                             let pokemonTypes = await getPokemonTypes(elements: information.types)
                             let name = information.name ?? "No Name"
                             let id = information.id ?? 0
+                            let height = information.height ?? 0
+                            let weight = information.weight ?? 0
+                            let baseExperience = information.baseExperience ?? 0
+                            let pokemonDetails = await getPokemonDetails(id: id)
+                            let pokemonDescription = PokemonDescription(description: pokemonDetails,
+                                                                        height: height, weight: weight,
+                                                                        baseExperience: baseExperience)
                             
-                            let pokemon = Pokemon(id: id, name: name, image: pokemonImage, PokemonTypes: pokemonTypes)
+                            let pokemon = Pokemon(id: id, name: name, image: pokemonImage, PokemonTypes: pokemonTypes, pokemoDescription: pokemonDescription)
                             
                             return .success(pokemon)
                         case .failure(let error):
@@ -146,5 +153,25 @@ class PokemonListViewModel: ObservableObject {
         }
         
         return resultTypes
+    }
+    
+    func getPokemonDetails(id: Int) async -> String {
+        
+        let result = await networkService.getPokemonDetails(id: id)
+        
+        switch result {
+            case .success(let data):
+                var description = ""
+                data.flavorTextEntries?.forEach({ flavorTextEntry in
+                    if let text = flavorTextEntry.flavorText, let language = flavorTextEntry.language?.name, language == "en" {
+                        if description.contains(text) == false {
+                            description += text
+                        }
+                    }
+                })
+                return description.formattedText()
+            case .failure(_):
+                return "No information about this pokémon"
+        }
     }
 }

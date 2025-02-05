@@ -16,7 +16,7 @@ struct PokemonListUI: View {
             if viewModel.isLoading == true {
                 LoaderCellUI()
             } else {
-                NavigationSplitView {
+                NavigationStack {
                     ZStack {
                         Color.pokedexBackground
                             .ignoresSafeArea()
@@ -24,7 +24,9 @@ struct PokemonListUI: View {
                             ScrollView {
                                 LazyVGrid(columns: [GridItem(.fixed((geometry.size.width / 2) - 10)), GridItem(.fixed((geometry.size.width / 2) - 10))], spacing: 15.0, content: {
                                     ForEach(viewModel.pokemonsList, id: \.name) { pokemon in
-                                        NavigationLink(destination: PokemonDetailUI(pokemon: pokemon)) {
+                                        NavigationLink {
+                                            PokemonDetailUI(pokemon: pokemon)
+                                        } label: {
                                             PokemonCellUI(pokemonNumber: String(format: "#%03d", pokemon.id),
                                                           pokemonName: pokemon.name.capitalized,
                                                           pokemonImage: pokemon.image,
@@ -38,7 +40,8 @@ struct PokemonListUI: View {
                                                 }
                                             }
                                         }
-                                        
+                                        .transition(.scale)
+                                        .animation(.easeInOut, value: pokemon.id)
                                     }
                                 })
                             }
@@ -53,8 +56,6 @@ struct PokemonListUI: View {
                             }
                         }
                     }
-                } detail: {
-                    Text("Select a Pokemon")
                 }
             }
         }

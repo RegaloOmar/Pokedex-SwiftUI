@@ -12,11 +12,13 @@ class Pokemon {
     let name: String
     let image: UIImage?
     let pokemonTypes: [PokemonTypeData]
+    let pokemonDescription: PokemonDescription
 
-    init(id: Int, name: String, image: UIImage?, PokemonTypes: [PokemonTypeData]) {
+    init(id: Int, name: String, image: UIImage?, PokemonTypes: [PokemonTypeData], pokemoDescription: PokemonDescription) {
         self.id = id
         self.name = name
         self.image = image
         self.pokemonTypes = PokemonTypes
+        self.pokemonDescription = pokemoDescription
     }
 }

@@ -13,5 +13,4 @@ struct PokemonDescription {
     let height: Int
     let weight: Int
     let baseExperience: Int
-    var evolutionChain: [(in: Pokemon, to: Pokemon)]
 }
