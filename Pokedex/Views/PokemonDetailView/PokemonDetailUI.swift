@@ -23,20 +23,25 @@ struct PokemonDetailUI: View {
                     .frame(width: 200, height: 200)
                     .padding()
                 
+                Text(pokemon.name.capitalized)
+                    .font(.title)
+                    .bold()
+                
                 HStack {
                     Text("Height: \(pokemon.pokemonDescription.height) ft")
-                        .font(.subheadline)
+                        .font(.headline)
                         .fontDesign(.rounded)
                         .bold()
                     Text("Weight: \(pokemon.pokemonDescription.weight) lbs")
-                        .font(.subheadline)
-                        .fontDesign(.rounded)
-                        .bold()
-                    Text("Base Experience: \(pokemon.pokemonDescription.baseExperience)")
-                        .font(.subheadline)
+                        .font(.headline)
                         .fontDesign(.rounded)
                         .bold()
                 }
+                
+            Text("Base Experience: \(pokemon.pokemonDescription.baseExperience)")
+                .font(.headline)
+                .fontDesign(.rounded)
+                .bold()
                 
                 if pokemon.pokemonTypes.count == 1 {
                     LazyVGrid(columns: [GridItem(.fixed(100))],alignment: .center, content: {
@@ -58,10 +63,11 @@ struct PokemonDetailUI: View {
                         .fontDesign(.rounded)
                     .bold()
                 }
+                .padding(.horizontal, 10)
                 
                 Spacer()
             }
-            .navigationTitle(pokemon.name.capitalized)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
